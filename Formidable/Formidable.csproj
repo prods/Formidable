@@ -49,7 +49,9 @@
     <Compile Include="Interfaces\IFormView.cs" />
     <Compile Include="Interfaces\IFormViewModel.cs" />
     <Compile Include="AsyncPresenter.cs" />
+    <Compile Include="Interfaces\IFormViewModelSnapshotProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnapshotProvider\DefaultSnapshotProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

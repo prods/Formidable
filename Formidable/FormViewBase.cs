@@ -1,12 +1,6 @@
 ﻿using Formidable.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Formidable
@@ -15,10 +9,8 @@ namespace Formidable
         where TFormViewModel : IFormViewModel, new()
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private Dictionary<string, byte[]> _snapshots = new Dictionary<string, byte[]>();
-
-
+        private IFormViewModelSnapshotProvider<TFormViewModel> _snapshotProvider;
+        
         #region Constructors
 
         public FormViewBase()
@@ -49,6 +41,24 @@ namespace Formidable
             {
                 this.Initialize();
             }
+
+            this.internalInitialization();
+        }
+
+        public FormViewBase(IFormViewModelSnapshotProvider<TFormViewModel> snapshotProvider)
+        {
+            this.ViewModel = new TFormViewModel();
+
+            if (this.IsDesignMode)
+            {
+                this.InitializeOnDesignMode();
+            }
+            else
+            {
+                this.Initialize();
+            }
+
+            this._snapshotProvider = snapshotProvider;
 
             this.internalInitialization();
         }
@@ -128,6 +138,12 @@ namespace Formidable
                     this.PropertyChanged(sender, e);
                 }
             };
+
+            // Set default Snapshots Provider
+            if (this._snapshotProvider == null)
+            {
+                this._snapshotProvider = new SnapshotProvider.DefaultSnapshotProvider<TFormViewModel>();
+            }
         }
 
         #endregion
@@ -138,92 +154,50 @@ namespace Formidable
         /// <summary>
         /// Takes a Snapshot from the View Model State
         /// </summary>
-        public string TakeSnapshot(bool toDisk = false)
+        public string TakeViewModelSnapshot(bool toDisk = false)
         {
-            string _snapshotId = "";
-
-            using (MemoryStream _snapshotStream = new MemoryStream())
-            {
-                BinaryFormatter _formatter = new BinaryFormatter();
-                try
-                {
-                    _formatter.Serialize(_snapshotStream, this.ViewModel);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("There was an error while taking a snapshot of the view model.", ex);
-                }
-
-                this._snapshots.Add(_snapshotId, _snapshotStream.ToArray());
-            }
-
-            return _snapshotId;
+            return this._snapshotProvider.TakeSnapshot(this.ViewModel, toDisk);
         }
 
         /// <summary>
         /// Restores a View Model State Snapshot
         /// </summary>
-        public void RestoreSnapShot(string snapshotId)
+        public void RestoreViewModelSnapshot(string snapshotId)
         {
-            if (this._snapshots.ContainsKey(snapshotId))
-            {
-                using (MemoryStream _snapshotStream = new MemoryStream(this._snapshots[snapshotId]))
-                {
-                    BinaryFormatter _formatter = new BinaryFormatter();
-                    try
-                    {
-                        this.ViewModel = (TFormViewModel)_formatter.Deserialize(_snapshotStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("There was an error while restoring a snapshot of the view model.", ex);
-                    }
-                }
-            }
+            this.ViewModel = this._snapshotProvider.GetSnapshot(snapshotId);
         }
 
         /// <summary>
         /// Restores last View Model State Snapshot
         /// </summary>
-        public void RestoreLatestSnapShot()
+        public void RestoreLatestViewModelSnapshot()
         {
-            if (this._snapshots.Any())
-            {
-                using (MemoryStream _snapshotStream = new MemoryStream(this._snapshots.Last().Value))
-                {
-                    BinaryFormatter _formatter = new BinaryFormatter();
-                    try
-                    {
-                        this.ViewModel = (TFormViewModel)_formatter.Deserialize(_snapshotStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("There was an error while restoring the latest snapshot of the view model.", ex);
-                    }
-                }
-            }
+            this.ViewModel = this._snapshotProvider.GetLatestSnapshot();
         }
 
         /// <summary>
         /// Restores last View Model State Snapshot
         /// </summary>
-        public void RestoreFirstSnapShot()
+        public void RestoreFirstViewModelSnapShot()
         {
-            if (this._snapshots.Any())
-            {
-                using (MemoryStream _snapshotStream = new MemoryStream(this._snapshots.First().Value))
-                {
-                    BinaryFormatter _formatter = new BinaryFormatter();
-                    try
-                    {
-                        this.ViewModel = (TFormViewModel)_formatter.Deserialize(_snapshotStream);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("There was an error while restoring the latest snapshot of the view model.", ex);
-                    }
-                }
-            }
+            this.ViewModel = this._snapshotProvider.GetFirstSnapshot();
+        }
+
+        /// <summary>
+        /// Clear all snapshots
+        /// </summary>
+        public void CleanViewModelSnapshots()
+        {
+            this._snapshotProvider.Clean();
+        }
+
+        /// <summary>
+        /// Get Snapshots count
+        /// </summary>
+        /// <returns></returns>
+        public int SnapshotsCount()
+        {
+            return this._snapshotProvider.Count();
         }
 
         #endregion
