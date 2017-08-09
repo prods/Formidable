@@ -7,7 +7,7 @@ In development...but working...
 ### Introduction
 Formidable is a simple MVVM framework for .NET Windows Forms solutions that aims to provide a _simple_ way of isolating your State and Business logic from your Presentation logic while reinforcing re-usability and refactoring.
 
-### Why winforms? Isn't it dead already?...
+### Why Windows Forms? Isn't it dead already?...
 Well, this is a good question. Even if the tendency is for Windows Forms to die the slow death of platform-specific technologies used to build Pyramids, in the Javascript era, it is still being used by multiple companies to support custom "business-critical" enterprise solutions. 
 This project was born out of my experience dealing with maintaining legacy Winforms applications at previous jobs.
 
@@ -38,12 +38,13 @@ The Purpose of this project is not make you fall in love with Windows Forms all 
 4. **Do I have to create all classes in separate files or can they live in the form file?**
    Yes, that is an organizational decision. The only thing to keep in mind when keeping all 4 classes together in the form file is to leave the Partial Form Class at the top, since that is requirement for the designer to work.  
 5. **What is the WithControl<> method used for?**
-   Ahhh, that is tool available in the FormBase that will allow you to perform asynchronous calls without locking your UI. Example: Bind a large dataset and load it into a datagrid while still allow the user to interact with other controls or asynchronously load combo-boxes while the user fills other values.
+   This is tool available in the FormBase that will allow you to perform asynchronous calls without locking your UI. Example: Bind a large dataset and load it into a datagrid while still allow the user to interact with other controls or asynchronously load combo-boxes while the user fills other values.
 6. **Is the API stable?**
    Not 100%. The design and described components should not change but there is always room for improvements.
 7. **Can it be better?**
    Definitely, there is always room for improvements, but I will always try to keep it as simple as possible.
 8. **Will it do everything for me?** Like cooking you a meal or drive you to work? No, definitely not. This framework is intended to provide a foundation, a pattern to follow. Keeping your breakfast from burning or driving on the safe side of the road is still on your hands. 
+9. **Nuget Package?**. Not yet...but coming up...
 
 #### Components:
 1. **Form**. 
@@ -97,6 +98,12 @@ The Purpose of this project is not make you fall in love with Windows Forms all 
    ```
    This form you be an empty shell. No logic should be placed at this level. You should be able to copy and paste this class only changing the Name and the View and ViewModel Types.
 
+   **API**
+
+   `WithControl<TControl>(TControl, Action<TControl>, bool)` Returns _void_. This method allows you to execute operations on the provided Generic TControl type (of type Control) in an asynchronous manner.
+
+   `View` Returns _Generic Form View Type_. This property returns the Form View instance.
+
 3. **Form View**. The Form View is where all the business logic resides and where all required state modification and retrieval methods and functions should live.
 
     Inherits from a **FormViewBase**.
@@ -121,8 +128,18 @@ The Purpose of this project is not make you fall in love with Windows Forms all 
    ```
    No Presentation specific logic should ever be passed into this level. Example: Do not pass a Control instance or type into any function on the view.
 
+   **API**
 
-4. **Form View Model**. This is where your form state lives. All properties and variables that are affected accross your application should live here.
+   `Initialize()` Returns _void_. This method is executed by the FormViewBase constructor at runtime.
+   
+   `InitializeOnDesignMode()` Returns _void_. This method is executed by the FormViewBase constructor when in design mode. (Unit Testing).
+
+   `VieModel` Returns _Generic ViewModel Type_. This property returns the ViewModel instance.
+
+   `IsDesignMode()` Returns _Boolean_. This property determines if the FormView is being used in design mode.
+
+
+4. **Form View Model**. This is where your form state lives. All properties and variables that are affected across your application should live here.
    
    Inherits from a **FormViewModelBase**.
    
@@ -155,6 +172,13 @@ The Purpose of this project is not make you fall in love with Windows Forms all 
         }
    ```
 
+   **API**
+
+   `ResetState()` Returns _void_. Resets the View Model State.
+
+   `HasChanges()` Returns _Boolean_. Determines if the View Model State was changed.
+
+
 
 ### How to use WithControl<>
 
@@ -170,9 +194,17 @@ In order to achieve sequential operations on a separate Task it uses a callback 
 
 ```
 
+
 ### State Snapshots
 
 **Pending Documentation**
+
+
+
+### Dependencies:
+
+NONE
+
 
 ### License
 
