@@ -25,13 +25,21 @@ The Purpose of this project is not make you fall in love with Windows Forms all 
 2. State and Business logic isolated from Presentation layer.
 2. Centralized Form State accessible through the Form View Model.
 3. Form Business Logic (Form View) is fully testable.
-4. Form State can be persisted and reloaded. 
+6. Form State can potentially be shared across forms, persisted and reloaded.
+
+### Rules:
+1. State should only live in the Form View Model. You should add properties to the Form View Model for each value required to be kept for the life of the form at a global level.
+2. State should only be modified by the Form View. The Presentation Layer should never directly modify the View Model State, even if the View Model is exposed on the Form View.
+3. All Business logic should be re-factored into the Form View and no business logic should be present in the Presentation or the View Model layer.
+4. The Presentation layer should always take care of any presentation specific logic and access the view through the Form View.
+
+_You may follow these rules or not. Formidable will not enforce any of these rules, but if you follow them it will help you better take advantage of the pattern._
 
 ### Common Questions:
 1. **Can I use any Custom or Third-Party Controls?**
    Yes, you can use anything, from Telerik and Infragistics to your custom controls. But, please keep in mind that different control implementations bindings may behave differently.
-2. **I am forced to use Bindings and make all View model property raise NotifyOnPropertyChange?**
-   Well, you should try a abide by that rule if you would like to keep your state, business logic and presentation logic separated. But Formidable does not force you go in any specific route. The only thing that is set in stone is precisely that, your state, business logic and presentation logic should live in separate entities and the business logic should only live at the View level.
+2. **I am forced to use Bindings and make all View model property raise NotifyPropertyChanged?**
+   Well, you should try a abide by that rule if you would like to keep your state, business logic and presentation logic separated. But, Formidable does not force you go in any specific route. The only thing that is set in stone is precisely that, your state, business logic and presentation logic should live in separate entities and the business logic should only live at the View level.
    Another approach is to use the Windows Forms Native Event Pattern and call View methods in order to update and  retrieve values from your state (ViewModel).
 3. **What if my application already has an abstract form I have to inherit from?**
    I bet you will find creative ways of resolving this issue...but unfortunately C# does not allow multiple inheritance. I am thinking of ways to go around this. 
