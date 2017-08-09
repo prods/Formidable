@@ -48,7 +48,7 @@
     <Compile Include="FormViewModelBase.cs" />
     <Compile Include="Interfaces\IFormView.cs" />
     <Compile Include="Interfaces\IFormViewModel.cs" />
-    <Compile Include="ResponsiveUI.cs" />
+    <Compile Include="AsyncPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

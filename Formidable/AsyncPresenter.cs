@@ -7,10 +7,10 @@ using System.Windows.Forms;
 
 namespace Formidable
 {
-    public class ResponsiveUI
+    public class AsyncPresenter
     {
         private static object threadLocker = new object();
-        private static ResponsiveUI instance = null;
+        private static AsyncPresenter instance = null;
         private TaskFactory taskFactory = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.None);
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Formidable
             }
         }
 
-        public static ResponsiveUI Instance
+        public static AsyncPresenter Instance
         {
             get
             {
@@ -132,7 +132,7 @@ namespace Formidable
                 {
                     lock (threadLocker)
                     {
-                        instance = new ResponsiveUI();
+                        instance = new AsyncPresenter();
                     }
                 }
 

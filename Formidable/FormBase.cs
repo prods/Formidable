@@ -35,7 +35,7 @@ namespace Formidable
         protected void WithControl<TControl>(TControl Control, Action<TControl> UIOperation, bool Async = false)
             where TControl : Control
         {
-            ResponsiveUI.Instance.WithControl<TControl>(Control, UIOperation, Async);
+            AsyncPresenter.Instance.WithControl<TControl>(Control, UIOperation, Async);
         }
 
         /// <summary>
