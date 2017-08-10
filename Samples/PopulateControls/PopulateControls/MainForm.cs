@@ -16,19 +16,36 @@ namespace PopulateControls
         public MainForm() : base()
         {
             InitializeComponent();
-            this.bindControls();
+            this.initialize();
         }
 
-        public void Initialize()
-        {  
+        #region Events 
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.refreshMembersData();
+        }
+
+        #endregion
+
+        #region Public Methods and Functions
+
+        #endregion
+
+        #region Private Methods and Functions
+
+        private void initialize()
+        {
             // After View and View models are created, but before controls are initialized.
             this.tbText.KeyPress += (sender, args) =>
             {
                 if (!char.IsDigit(args.KeyChar))
                 {
-                    args.Handled = false;
+                    args.Handled = true;
                 }
             };
+
+            this.bindControls();
         }
 
         private void bindControls()
@@ -49,7 +66,7 @@ namespace PopulateControls
             });
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void refreshMembersData()
         {
             this.WithNewTask(() =>
             {
@@ -68,8 +85,10 @@ namespace PopulateControls
             }, (ex) =>
             {
                 // Exception 
-                MessageBox.Show("Error", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             });
         }
+
+        #endregion
     }
 }
