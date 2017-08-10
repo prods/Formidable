@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,27 +10,30 @@ namespace Formidable
 {
     public class AsyncPresenter
     {
-        private static object threadLocker = new object();
-        private static AsyncPresenter instance = null;
-        private TaskFactory taskFactory = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.None);
+        private readonly TaskFactory _taskFactory;
+
+        public AsyncPresenter()
+        {
+            this._taskFactory = new TaskFactory(TaskCreationOptions.PreferFairness, TaskContinuationOptions.None);
+        }
 
         /// <summary>
         /// Runs Specified Operation and Subsequent Callback in a new Task
         /// </summary>
-        /// <param name="Operation"></param>
-        /// <param name="Callback"></param>
+        /// <param name="operation"></param>
+        /// <param name="callback"></param>
         /// <returns></returns>
-        public Task WithNewTask(Action Operation, Action Callback = default(Action), Action<Exception> FailureCallback = default(Action<Exception>))
+        public Task WithNewTask(Action operation, Action callback = default(Action), Action<Exception> failureCallback = default(Action<Exception>))
         {
-            if (Callback != default(Action))
+            if (callback != default(Action))
             {
-                return this.taskFactory.StartNew(Operation).ContinueWith((previous) =>
+                return this._taskFactory.StartNew(operation).ContinueWith((previous) =>
                 {
                     if (previous.Exception != null)
                     {
-                        if (FailureCallback != default(Action<Exception>))
+                        if (failureCallback != default(Action<Exception>))
                         {
-                            FailureCallback(previous.Exception);
+                            failureCallback(previous.Exception);
                         }
                         else
                         {
@@ -38,48 +42,48 @@ namespace Formidable
                     }
                     else
                     {
-                        Callback();
+                        callback();
                     }
                 });
             }
             else
             {
-                return this.taskFactory.StartNew(Operation);
+                return this._taskFactory.StartNew(operation);
             }
         }
 
         /// <summary>
         /// Executes Operation after all provided Tasks are completed
         /// </summary>
-        /// <param name="Tasks"></param>
-        /// <param name="Operation"></param>
+        /// <param name="tasks"></param>
+        /// <param name="operation"></param>
         /// <returns></returns>
-        public Task ContinueAfter(Task[] Tasks, Action<Task[]> Operation, Action<Exception> FailureCallback = default(Action<Exception>))
+        public Task ContinueAfter(Task[] tasks, Action<Task[]> operation, Action<Exception> failureCallback = default(Action<Exception>))
         {
-            if (Tasks != null && Tasks.Count() > 0)
+            if (tasks != null && tasks.Any())
             {
-                return this.taskFactory.ContinueWhenAll(Tasks, (t) => {
-                    bool failure = false;
-                    foreach (Task task in t)
+                return this._taskFactory.ContinueWhenAll(tasks, (t) => {
+                    bool _failure = false;
+                    foreach (Task _task in t)
                     {
-                        if (task.Exception != null)
+                        if (_task.Exception != null)
                         {
-                            failure = true;
-                            if (FailureCallback != default(Action<Exception>))
+                            _failure = true;
+                            if (failureCallback != default(Action<Exception>))
                             {
-                                FailureCallback(task.Exception);
+                                failureCallback(_task.Exception);
                             }
                             else
                             {
-                                throw task.Exception;
+                                throw _task.Exception;
                             }
                             break;
                         }
                     }
 
-                    if (!failure)
+                    if (!_failure)
                     {
-                        Operation(t);
+                        operation(t);
                     }
 
                 });
@@ -94,49 +98,33 @@ namespace Formidable
         /// Executes UI Operation using the specified Control (cross-threads)
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="Control"></param>
-        /// <param name="UIOperation"></param>
+        /// <param name="control"></param>
+        /// <param name="uiOperation"></param>
         [DebuggerStepThrough]
-        public void WithControl<T>(T Control, Action<T> UIOperation, bool Async = false) where T : Control
+        public void WithControl<T>(T control, Action<T> uiOperation, bool async = false) where T : Control
         {
-            MethodInvoker method = (MethodInvoker)(() =>
+            MethodInvoker _method = (MethodInvoker)(() =>
             {
-                UIOperation(Control);
+                uiOperation(control);
             });
 
-            if (Control.InvokeRequired)
+            if (control.InvokeRequired)
             {
-                if (!Async)
+                if (!async)
                 {
-                    Control.Invoke(method);
+                    control.Invoke(_method);
                 }
                 else
                 {
-                    Control.BeginInvoke(method);
+                    control.BeginInvoke(_method);
                 }
             }
             else
             {
-                if (!Control.IsDisposed)
+                if (!control.IsDisposed)
                 {
-                    UIOperation(Control);
+                    uiOperation(control);
                 }
-            }
-        }
-
-        public static AsyncPresenter Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    lock (threadLocker)
-                    {
-                        instance = new AsyncPresenter();
-                    }
-                }
-
-                return instance;
             }
         }
     }

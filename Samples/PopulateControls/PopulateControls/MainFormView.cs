@@ -4,24 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PopulateControls.Repositories;
 
 namespace PopulateControls
 {
     /// <summary>
     /// Main FormView Plug
     /// </summary>
-    public abstract class MainFormViewPlug : FormBase<MainFormView,MainFormViewModel>
+    public class MainFormViewPlug : FormBase<MainFormView,MainFormViewModel>
     {
-        public MainFormViewPlug() : base() {
-            this.Initialize();
+        protected MainFormViewPlug() : base() {
         }
-
-        protected override void initializeForm()
-        {
-            this.Initialize();
-        }
-
-        public abstract void Initialize();
     }
 
     /// <summary>
@@ -29,19 +22,29 @@ namespace PopulateControls
     /// </summary>
     public class MainFormView : FormViewBase<MainFormViewModel>
     {
-        public MainFormView() : base()
-        {
+        private MemberRepository _memberRepository;
 
+        public MainFormView() : base()
+        {   
         }
 
         protected override void Initialize()
         {
-            
+            this._memberRepository = new MemberRepository();
         }
 
         protected override void InitializeOnDesignMode()
         {
             
+        }
+
+        public void LoadMembers()
+        {
+            if (this.ViewModel.GetMemberNumberInt() == 0)
+            {
+                throw new Exception("No members number was provided.");
+            }
+            this.ViewModel.Members = this._memberRepository.GetMembers(this.ViewModel.GetMemberNumberInt());
         }
     }
 }

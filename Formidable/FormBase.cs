@@ -13,29 +13,36 @@ namespace Formidable
         where TFormView : IFormView<TFormViewModel>, new()
         where TFormViewModel : IFormViewModel, new()
     {
-        public FormBase() : base()
+        private readonly AsyncPresenter _asyncPresenter;
+
+        protected FormBase() : base()
         {
             this.View = new TFormView();
-            this.initializeForm();
-            
+            this._asyncPresenter = new AsyncPresenter();
         }
 
         /// <summary>
-        /// Initializes Form
+        /// Runs Specified Operation and Subsequent Callback in a new Task
         /// </summary>
-        protected abstract void initializeForm();
+        /// <param name="operation"></param>
+        /// <param name="callback"></param>
+        /// <param name="failureCallback"></param>
+        protected void WithNewTask(Action operation, Action callback = default(Action), Action<Exception> failureCallback = default(Action<Exception>))
+        {
+            this._asyncPresenter.WithNewTask(operation, callback, failureCallback);
+        }
         
         /// <summary>
         /// Performs Asynchronous operations on the provided controls
         /// </summary>
         /// <typeparam name="TControl"></typeparam>
-        /// <param name="Control"></param>
-        /// <param name="UIOperation"></param>
-        /// <param name="Async"></param>
-        protected void WithControl<TControl>(TControl Control, Action<TControl> UIOperation, bool Async = false)
+        /// <param name="control"></param>
+        /// <param name="uiOperation"></param>
+        /// <param name="async"></param>
+        protected void WithControl<TControl>(TControl control, Action<TControl> uiOperation, bool async = false)
             where TControl : Control
         {
-            AsyncPresenter.Instance.WithControl<TControl>(Control, UIOperation, Async);
+            this._asyncPresenter.WithControl<TControl>(control, uiOperation, async);
         }
 
         /// <summary>

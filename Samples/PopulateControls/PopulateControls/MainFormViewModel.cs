@@ -1,11 +1,6 @@
-﻿using Formidable.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using Formidable;
+using PopulateControls.Models;
 
 namespace PopulateControls
 {
@@ -14,28 +9,53 @@ namespace PopulateControls
     /// </summary>
     public class MainFormViewModel : FormViewModelBase
     {
-        private string _labelText;
+        private int _membersNumber;
+        private IEnumerable<Member> _members;
 
         public MainFormViewModel() : base()
         {
-            this._labelText = string.Empty;
+            // Initial State
+            this._membersNumber = 0;
         }
 
-        public string LabelText
+        public string MembersNumber
         {
-            get
-            {
-                return this._labelText;
-            }
+            get { return this._membersNumber.ToString(); }
             set
             {
-                if (this._labelText != value)
+                int _value = 0;
+                if (value == string.Empty)
                 {
-                    this._labelText = value;
+                    this._membersNumber = _value;
+                }
+                else
+                {
+                    int.TryParse(value, out _value);
+                    if (this._membersNumber != _value)
+                    {
+                        this._membersNumber = _value;
+                        NotifyPropertyChanged();
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<Member> Members
+        {
+            get { return this._members; }
+            set
+            {
+                if (this._members != value)
+                {
+                    this._members = value;
                     NotifyPropertyChanged();
                 }
             }
         }
 
+        public int GetMemberNumberInt()
+        {
+            return this._membersNumber;
+        }
     }
 }

@@ -195,11 +195,27 @@ In order to achieve sequential operations on a separate Task it uses a callback 
 
 ```csharp
         
-    // Called From Inside a Form inheriting from the FormPlug or FormBase
-    this.WithControl(lblText, (label) => {
-        label.Text = "This just happened!";
-    }, true)
+		// Called From Inside a Form inheriting from the FormPlug or FormBase
+		 this.WithNewTask(() =>
+            {
+                tsOngoingOperation.Text = $"Loading {this.View.ViewModel.GetMemberNumberInt()} Members...Please wait...";
 
+                this.setupGridView();
+                // Load Content
+                this.View.LoadMembers();
+            }, () =>
+            {
+				// Load Data into grid without locking the UI
+                this.WithControl(this.dgMembers, (gridView) =>
+                {
+                    gridView.DataSource = this.View.ViewModel.Members;
+                    tsOngoingOperation.Text = $"{this.View.ViewModel.GetMemberNumberInt()} were loaded.";
+                });
+            }, (ex) =>
+            {
+                // Exception 
+                MessageBox.Show("Error", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            });
 ```
 
 
