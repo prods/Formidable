@@ -101,7 +101,7 @@ _You may follow these rules or not. Formidable will not enforce any of these rul
                 this.Initialize();
              }
 
-             public abstract void Initialize();
+             public virtual void Initialize();
         }
    ```
    This form you be an empty shell. No logic should be placed at this level. You should be able to copy and paste this class only changing the Name and the View and ViewModel Types.
@@ -195,27 +195,29 @@ In order to achieve sequential operations on a separate Task it uses a callback 
 
 ```csharp
         
-		// Called From Inside a Form inheriting from the FormPlug or FormBase
-		 this.WithNewTask(() =>
-            {
-                tsOngoingOperation.Text = $"Loading {this.View.ViewModel.GetMemberNumberInt()} Members...Please wait...";
+    // Called From Inside a Form inheriting from the FormPlug or FormBase
 
-                this.setupGridView();
-                // Load Content
-                this.View.LoadMembers();
-            }, () =>
-            {
-				// Load Data into grid without locking the UI
-                this.WithControl(this.dgMembers, (gridView) =>
-                {
-                    gridView.DataSource = this.View.ViewModel.Members;
-                    tsOngoingOperation.Text = $"{this.View.ViewModel.GetMemberNumberInt()} were loaded.";
-                });
-            }, (ex) =>
-            {
-                // Exception 
-                MessageBox.Show("Error", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            });
+    // Creates a New Task (Parallel to main thread)
+    this.WithNewTask(() =>
+    {
+        tsOngoingOperation.Text = $"Loading {this.View.ViewModel.GetMemberNumberInt()} Members...Please wait...";
+        
+        this.setupGridView();
+        // Load Content
+        this.View.LoadMembers();
+    }, () =>
+    {
+	    // Load Data into grid without locking the UI
+        this.WithControl(this.dgMembers, (gridView) =>
+        {
+            gridView.DataSource = this.View.ViewModel.Members;
+            tsOngoingOperation.Text = $"{this.View.ViewModel.GetMemberNumberInt()} were loaded.";
+        });
+    }, (ex) =>
+    {
+        // Exception 
+        MessageBox.Show("Error", ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+    });
 ```
 
 
