@@ -190,8 +190,10 @@ _You may follow these rules or not. Formidable will not enforce any of these rul
 
 ### How to use WithControl<>
 
-You should be able to use this method anywhere where you would like your Presentation to make asynchronously calls without locking the main thread hence the UI. It should be fairly easy to use.
+You should be able to use this method anywhere where you would like your Presentation to make asynchronous calls without locking the main thread hence the UI. It should be fairly easy to use in conjunction with `WithNewTask<>()`
 In order to achieve sequential operations on a separate Task it uses a callback design.
+
+`WithNewTask<>` Creates a new task to execute a provided anonymous action, a callback and an exception handler action. The 1st operation is usually to load data or perform any long operation, the second to update the control wrapped into a `WithControl<>` and the third to handle exceptions during execution.
 
 ```csharp
         
@@ -220,11 +222,14 @@ In order to achieve sequential operations on a separate Task it uses a callback 
     });
 ```
 
-
 ### State Snapshots
 
-**Pending Documentation**
+**Pending Documentation.**
 
+
+### Custom Controls:
+
+**Almost There. Pending Documentation.**
 
 
 ### Dependencies:
