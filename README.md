@@ -417,6 +417,7 @@ This should usually take care of the most common designer exception scenarios.
 
 ### Pending:
 - More documentation comments and comments in general.
+- State Snapshots and sharing documentation.
 - Cross-Thread binding without requiring explicit use of WithControl.
 - Unit Tests.
 - Nicer and better documented Samples :)
