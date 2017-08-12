@@ -18,7 +18,7 @@ namespace PopulateControls
             this._membersNumber = 0;
         }
 
-        public string MembersNumber
+        public string MembersNumberString
         {
             get { return this._membersNumber.ToString(); }
             set
@@ -34,9 +34,17 @@ namespace PopulateControls
                     if (this._membersNumber != _value)
                     {
                         this._membersNumber = _value;
-                        NotifyPropertyChanged();
+                        NotifyPropertyChanged("MemberNumber");
                     }
                 }
+            }
+        }
+
+        public int MemberNumber
+        {
+            get
+            {
+                return this._membersNumber;
             }
         }
 
@@ -48,7 +56,7 @@ namespace PopulateControls
                 if (this._members != value)
                 {
                     this._members = value;
-                    NotifyPropertyChanged();
+                    NotifyPropertyChanged("Members");
                 }
             }
         }

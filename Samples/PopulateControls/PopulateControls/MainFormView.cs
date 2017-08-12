@@ -9,15 +9,6 @@ using PopulateControls.Repositories;
 namespace PopulateControls
 {
     /// <summary>
-    /// Main FormView Plug
-    /// </summary>
-    public class MainFormViewPlug : FormBase<MainFormView,MainFormViewModel>
-    {
-        protected MainFormViewPlug() : base() {
-        }
-    }
-
-    /// <summary>
     /// Main Form View
     /// </summary>
     public class MainFormView : FormViewBase<MainFormViewModel>

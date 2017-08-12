@@ -50,8 +50,9 @@ namespace PopulateControls
 
         private void bindControls()
         {
-            this.View.Bind(tbText, "Text", "MembersNumber");
-            this.View.Bind(label2, "Text", "MembersNumber");
+            this.View.Bind(tbText, "Text", "MembersNumberString");
+            this.View.Bind(label2, "Text", "MembersNumberString");
+            this.View.Bind(this.gdvCustomGrid, "MembersNumber", "MemberNumber");
         }
 
         private void setupGridView()
@@ -87,6 +88,9 @@ namespace PopulateControls
                 // Exception 
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             });
+
+            // Refresh Custom Grid
+            gdvCustomGrid.RefreshData();
         }
 
         #endregion

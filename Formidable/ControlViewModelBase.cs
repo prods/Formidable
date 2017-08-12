@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Formidable
 {
-    public class FormViewModelBase : IFormViewModel
+    public class ControlViewModelBase : IFormViewModel
     {
         private bool _hasChanges;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public FormViewModelBase()
+        public ControlViewModelBase()
         {
             this._hasChanges = false;
         }
@@ -35,6 +35,7 @@ namespace Formidable
         }
 
 #else
+
         /// <summary>
         /// Raises Property Changed event
         /// </summary>
@@ -49,6 +50,8 @@ namespace Formidable
         }
 
 #endif
+
+
 
         /// <summary>
         /// Resets the Form View Model State

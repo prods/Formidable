@@ -39,25 +39,24 @@
             this.clmRegistrationDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sstMain = new System.Windows.Forms.StatusStrip();
             this.tsOngoingOperation = new System.Windows.Forms.ToolStripStatusLabel();
+            this.gdvCustomGrid = new PopulateControls.Controls.SampleGridControl();
             ((System.ComponentModel.ISupportInitialize)(this.dgMembers)).BeginInit();
             this.sstMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbText
             // 
-            this.tbText.Location = new System.Drawing.Point(18, 55);
-            this.tbText.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbText.Location = new System.Drawing.Point(12, 35);
             this.tbText.Name = "tbText";
-            this.tbText.Size = new System.Drawing.Size(241, 31);
+            this.tbText.Size = new System.Drawing.Size(162, 22);
             this.tbText.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 20);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(206, 25);
+            this.label1.Size = new System.Drawing.Size(136, 17);
             this.label1.TabIndex = 1;
             this.label1.Text = "Number of Members";
             // 
@@ -65,19 +64,17 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(14, 242);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(9, 155);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(134, 61);
+            this.label2.Size = new System.Drawing.Size(85, 38);
             this.label2.TabIndex = 2;
             this.label2.Text = "Text";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(18, 105);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Location = new System.Drawing.Point(12, 67);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(241, 36);
+            this.button1.Size = new System.Drawing.Size(161, 23);
             this.button1.TabIndex = 3;
             this.button1.Text = "Get Members";
             this.button1.UseVisualStyleBackColor = true;
@@ -94,10 +91,11 @@
             this.clmLastName,
             this.clmAge,
             this.clmRegistrationDate});
-            this.dgMembers.Location = new System.Drawing.Point(293, 55);
+            this.dgMembers.Location = new System.Drawing.Point(185, 35);
+            this.dgMembers.Margin = new System.Windows.Forms.Padding(2);
             this.dgMembers.Name = "dgMembers";
             this.dgMembers.RowTemplate.Height = 33;
-            this.dgMembers.Size = new System.Drawing.Size(1371, 956);
+            this.dgMembers.Size = new System.Drawing.Size(541, 612);
             this.dgMembers.TabIndex = 4;
             // 
             // clmFirstName
@@ -126,28 +124,36 @@
             this.sstMain.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.sstMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsOngoingOperation});
-            this.sstMain.Location = new System.Drawing.Point(0, 1041);
+            this.sstMain.Location = new System.Drawing.Point(0, 658);
             this.sstMain.Name = "sstMain";
-            this.sstMain.Size = new System.Drawing.Size(1676, 22);
+            this.sstMain.Padding = new System.Windows.Forms.Padding(1, 0, 9, 0);
+            this.sstMain.Size = new System.Drawing.Size(1384, 22);
             this.sstMain.TabIndex = 5;
             // 
             // tsOngoingOperation
             // 
             this.tsOngoingOperation.Name = "tsOngoingOperation";
-            this.tsOngoingOperation.Size = new System.Drawing.Size(0, 33);
+            this.tsOngoingOperation.Size = new System.Drawing.Size(0, 17);
+            // 
+            // gdvCustomGrid
+            // 
+            this.gdvCustomGrid.Location = new System.Drawing.Point(731, 35);
+            this.gdvCustomGrid.Name = "gdvCustomGrid";
+            this.gdvCustomGrid.Size = new System.Drawing.Size(641, 612);
+            this.gdvCustomGrid.TabIndex = 6;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1676, 1063);
+            this.ClientSize = new System.Drawing.Size(1384, 680);
+            this.Controls.Add(this.gdvCustomGrid);
             this.Controls.Add(this.sstMain);
             this.Controls.Add(this.dgMembers);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbText);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dgMembers)).EndInit();
@@ -171,6 +177,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn clmRegistrationDate;
         private System.Windows.Forms.StatusStrip sstMain;
         private System.Windows.Forms.ToolStripStatusLabel tsOngoingOperation;
+        private Controls.SampleGridControl gdvCustomGrid;
     }
 }
 

@@ -51,10 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\SampleGridControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SampleGridControl.Designer.cs">
+      <DependentUpon>SampleGridControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainFormViewPlug.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Repositories\MemberRepository.cs" />
     <Compile Include="MainFormView.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -68,6 +77,9 @@
     <Compile Include="Models\Member.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\SampleGridControl.resx">
+      <DependentUpon>SampleGridControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
