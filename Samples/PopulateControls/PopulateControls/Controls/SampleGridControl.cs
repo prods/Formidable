@@ -125,7 +125,7 @@ namespace PopulateControls.Controls
                 if (this._caption != value)
                 {
                     this._caption = value;
-                    NotifyPropertyChanged("Caption");
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace PopulateControls.Controls
                 if (this._memberNumber != value)
                 {
                     this._memberNumber = value;
-                    NotifyPropertyChanged("MemberNumber");
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace PopulateControls.Controls
                 if (this._members != value)
                 {
                     this._members = value;
-                    NotifyPropertyChanged("Members");
+                    NotifyPropertyChanged();
                 }
             }
         }

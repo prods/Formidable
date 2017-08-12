@@ -34,7 +34,7 @@ namespace PopulateControls
                     if (this._membersNumber != _value)
                     {
                         this._membersNumber = _value;
-                        NotifyPropertyChanged("MemberNumber");
+                        NotifyPropertyChanged();
                     }
                 }
             }
@@ -56,7 +56,7 @@ namespace PopulateControls
                 if (this._members != value)
                 {
                     this._members = value;
-                    NotifyPropertyChanged("Members");
+                    NotifyPropertyChanged();
                 }
             }
         }

@@ -19,22 +19,6 @@ namespace Formidable
             this._hasChanges = false;
         }
 
-#if NETFX_40
-
-        /// <summary>
-        /// Raises Property Changed event
-        /// </summary>
-        /// <param name="propertyName"></param>
-        protected void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                this._hasChanges = true;
-            }
-        }
-
-#else
 
         /// <summary>
         /// Raises Property Changed event
@@ -48,10 +32,6 @@ namespace Formidable
                 this._hasChanges = true;
             }
         }
-
-#endif
-
-
 
         /// <summary>
         /// Resets the Form View Model State
