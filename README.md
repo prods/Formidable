@@ -52,7 +52,9 @@ _You may follow these rules or not. Formidable will not enforce any of these rul
    I use the [Mads Kristensen's File Nesting VS Extension](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.FileNesting) when isolating them in separated files.
 5. **What is the WithControl<> method used for?**
    This is tool available in the FormBase that will allow you to perform asynchronous calls without locking your UI. Example: Bind a large dataset and load it into a datagrid while still allow the user to interact with other controls or asynchronously load combo-boxes while the user fills other values.
-6. **Is the API stable?**
+6. I am getting an exception stating that `[CallerMemberName]` attribute is present in `Formidable.dll` and `mscorlib.dll`
+   Make sure your application is targeting the same framework as the Formidable assembly build. .NET Framework version mismatch, specially <=4 with 4.5+ may cause exceptions on build since I use a workaround in order to make the Caller* Attributes available on <=4 versions of .NET.
+7. **Is the API stable?**
    Not 100%. The design and described components should not change but there is always room for improvements.
 7. **Can it be better?**
    Definitely, there is always room for improvements, but I will always try to keep it as simple as possible.
@@ -365,46 +367,6 @@ In order to achieve sequential operations on a separate Task it uses a callback 
 
 **Pending Documentation.**
 
-
-### .NET Frameworks Compatibility Considerations
-- By default he library is provided in .NET 4.0 so it can be used on older solutions, but this has is caveat. You will not be able to take advantage of the CallerMemberName Attribute because it is only available starting on .NET 4.5. The good news is that the solution is designed to be aware of the target .NET framework version and you should be able to make use of this attribute if you compile the Formidable Library to .NET 4.5+.
-
-    .NET 4.0
-    ```csharp 
-    public string CaptionText {
-        get 
-        {
-            return this._caption;
-        }
-        set 
-        {
-            if (this._caption != value) 
-            {
-                this._caption = value;
-                NotifyPropertyChanged("CaptionText");
-            }
-        }
-    }
-    ```
-
-    .NET 4.5+
-    ```csharp 
-    public string CaptionText {
-        get 
-        {
-            return this._caption;
-        }
-        set 
-        {
-            if (this._caption != value) 
-            {
-                this._caption = value;
-                // Property Name is auto-detected. Passing the property name is not required.
-                NotifyPropertyChanged();
-            }
-        }
-    }
-    ```
 
 ### Controls Inheritance and Visual Studio Winforms Designer
 As you may already know Visual Studio Winforms designer is not very resilient when using form inheritance, specially when the abstract classes live in a separate assembly. When you get a designer exception when opening the form please make sure to follow the steps below:
